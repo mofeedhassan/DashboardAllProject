@@ -1,0 +1,215 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+ <!-- CSS dependencies -->
+<link type="text/css" rel="stylesheet" href="css/bootstrap.css">
+
+</head>
+<body>
+<form id="linksTablesfrm" class="well span20" >
+	<div id= "linksTablesdiv" class="span3">
+		<table id= "linksTable"  class="table table-bordered table-hover tablesorter">
+			<thead>
+				<tr>
+					<th>File name</th>
+					<th>Source</th>
+					<th>Target</th>
+					<th>Type</th>
+					<th>Number of triples</th>
+					<th>Specs and links files</th>
+				</tr>
+			</thead>
+		<tbody>
+			<tr class="info">
+				<td><label id="lblFilename"></label></td>
+				<td><label id="lblSource"></label></td>
+				<td><label id="lblTarget"></label></td>
+				<td><label id="lblTriples"></label></td>
+				<td><label id="lblfiles"></label></td>
+				<td><input type="button" value ="Download"  class="btn btn-primary"  onClick="window.location.href='http://www.goldcoastwebdesigns.com/dl/aff-masters.zip'"/></td>  
+			</tr>
+		</tbody>
+		</table>
+	</div>
+</form> 
+<br>
+<!-- division that contains a table to be created dynamically-->
+<div id="dynamicTable">
+</div>
+
+<input type="file" name= "Text1" id="fileinput" />
+<input type="textbox" id="Tue" /> 
+<input id="idbtnOk"  type="button" value="Ok" />
+<h1>Hello</h1> <a href="javascript:void(0);">Link</a>
+<p id="mypar" >Content here. <a class="alert" href=#>Alert!</a></p><br>
+<a class="fileDownloadSimpleRichExperience" href="/FileDownload/DownloadReport/3">Report3.pdf</a><br>
+<a class="fileDownloadCustomRichExperience" href="/FileDownload/DownloadReport/0">Report0.pdf</a><br>
+Here is the dynamic table to be created:
+<form id="linksTablesfrm2" class="well span20" >
+	<div id= "linksTablesdiv" class="span3">
+		<table id="tbll" class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>File name</th>
+					<th>Source</th>
+					<th>Target</th>
+					<th>Type</th>
+					<th>Number of triples</th>
+					<th>Downloads</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</form> 
+<div id="preparing-file-modal" title="Preparing report..." style="display: none;">
+    We are preparing your report, please wait...
+ 
+    <div class="ui-progressbar-value ui-corner-left ui-corner-right" style="width: 100%; height:22px; margin-top: 20px;"></div>
+</div>
+<div id="error-modal" title="Error" style="display: none;">
+    There was a problem generating your report, please try again.
+</div>
+<div id="myDiv"></div>
+
+<iframe id="downloadFrame" style="display:none"></iframe>
+<!--<a id="link" href="#">Open</a> <input type="file" id="id_default_image" class="file_input" />​ -->
+
+
+
+ <!-- JS dependencies -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<!--<script type="text/javascript" src="https://raw.github.com/makeusabrew/bootbox/v2.4.2/bootbox.min.js"></script>-->
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/opensave.js"></script>
+<script type="text/javascript" src="js/jquery.fileDownload.js"></script>
+<script type="text/javascript" src="jquerytablesorter/jquery.tablesorter.js"></script>
+<script type="text/javascript" src="jquerytablesorter/jquery-latest.js"></script>
+
+<!-- bootbox code -->
+
+ <script type="text/javascript">
+	 file = fopen(getScriptPath("test.txt"), 0);
+	 file_length = flength(file);
+	content = fread(file, file_length);
+	document.getElementById("myDiv").innerText = content;
+	 var content;
+ $(document).ready(function() {
+		  createDynamicTable($("#tbll"), 10, 6);
+		  
+
+			$('a').click(function() {
+					$('#linksTable tbody').append('<tr class="child"><td>blahblah</td></tr>');
+			});
+			
+			$("h1").click(function(){
+				$("#mypar").slideToggle(300);
+			});
+			
+			$("td").click(function(){
+				$(this).Tooltip("good");
+			});
+			
+			$(".btn-primary").click(function(){
+				$("#mypar").hide(1000);
+			});
+			//function when click on Tue textbox the specified text is inserted
+			$("#Tue").click(function()
+			{
+				var inputValue =   "This is value in textbox.";
+				$("#Tue").val( inputValue  );
+			});
+			//function when clicking on the button the first table in the page increased by one row
+			$("#idbtnOk").click(function(){
+				//Creating New Row To The Table
+				$('#linksTable tbody>tr:last').clone(true).insertAfter('#linksTable tbody>tr:last');
+				//Adding Data To The Newly Created Row
+				$('#linksTable tbody>tr:last #lblTriplesNo').text("Your Data");
+            });
+
+		
+				$("#downloadbtn").on("click", function () {
+			 
+					var $preparingFileModal = $("#preparing-file-modal");
+			 
+					$preparingFileModal.dialog({ modal: true });
+			 
+					$.fileDownload($(this).attr('href'), {successCallback: function (url) {$preparingFileModal.dialog('close');},
+														  failCallback: function (responseHtml, url) {$preparingFileModal.dialog('close');
+																									   $("#error-modal").dialog({ modal: true });
+																									   }
+														 });
+					return false; //this is critical to stop the click event which will trigger a normal file download!
+				});
+
+				$("#linksTablesfrm").tablesorter();
+		});// The end of document load function
+		
+		//This function displays the choose file button and after selecting it it displays an alert with its information
+			  function readSingleFile(evt) {
+				//Retrieve the first (and only!) File from the FileList object
+				var f = evt.target.files[0]; 
+
+				if (f) {
+				  var r = new FileReader();
+				  r.onload = function(e) { 
+					contents = e.target.result;
+					alert( "Got the file.n" 
+						  +"name: " + f.name + "n"
+						  +"type: " + f.type + "n"
+						  +"size: " + f.size + " bytesn"
+						  + "starts with: " + contents.substr(1, contents.indexOf("n"))
+					);  
+					//document.write(contents);
+				  }
+				  r.readAsText(f);
+				} else { 
+				  alert("Failed to load file");
+				}
+			  }
+//to the specified element by id you add the previous function to its change event so whenever it happens it triggers the function
+	document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
+  
+  	function createDynamicTable(tbody, rows, cols) {
+           if (tbody == null || tbody.length < 1) return;
+           for (var r = 1; r <= rows; r++) {
+               var trow = $("<tr class=\"info\">");
+               var lblele=$("<label id="+cellText+"></label>");
+               for (var c = 1; c < cols; c++) 
+               {
+                   var cellText = "cell" + r + "." + c
+                   //$("<td>").addClass("tableCell").text(cellText).data("col", c).appendTo(trow); put a text inside the cell
+                   lblele.appendTo($("<td>").appendTo(trow));
+               }
+               var cellText = "Cell " + r + "." + cols;
+               var btnele=$("<input type=\"button\" value =\"links file\"  class=\"btn btn-primary\"  onClick=\"window.location.href='http://www.goldcoastwebdesigns.com/dl/aff-masters.zip'\"/>"+
+               "  <input type=\"button\" value =\"Specs file\"  class=\"btn btn-primary\"  onClick=\"window.location.href='http://www.goldcoastwebdesigns.com/dl/aff-masters.zip'\"/>");
+               btnele.appendTo($("<td>").appendTo(trow));
+              trow.appendTo(tbody);
+          }
+		response.setHeader("Content-Disposition: attachment", "filename=\"http://linker.sindice.com/runtime-results/2011-02-10/dbpedia-lgd_airport.xml/links.nt\"");      }     
+      $('#tbll').fixheadertable({ 
+			height     : 200, 
+			zebra      : true,
+			zebraClass : 'ui-state-active' // default
+		});
+function downloadFile() {
+   window.location.href = 'http://www.goldcoastwebdesigns.com/dl/aff-masters.zip';
+}
+</script>
+<input type="button" onclick="downloadFile();" value="Download!"/>
+<button onclick="javascript:document.execCommand('SaveAs','1','fileName.txt');">Click to save</Button>
+<div id="saveData">Data to save comes from here.</div>
+<div id="saveButton">
+<button type="button">Click Me!</button>
+</div>
+<script language="javascript"> 
+opensave.make({width: 100, height: 30, dataID: "saveData", buttonDiv: "saveButton"});
+</script>
+
+<form method="get" action="http://linker.sindice.com/runtime-results/2011-02-10/dbpedia-lgd_airport.xml/links.nt">
+<button type="submit">Download!</button>
+</form>
+</body>
+</html>
